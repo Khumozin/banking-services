@@ -1,9 +1,13 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { KafkaService } from 'src/kafka/services/kafka.service';
 import { Repository } from 'typeorm';
 import { Transaction } from '../entities/transaction.entity';
-import { DepositDto, TransactionInitiatedEvent, TransferDto } from '../dtos/transaction.dto';
+import {
+  DepositDto,
+  TransactionInitiatedEvent,
+  TransferDto,
+} from '../dtos/transaction.dto';
 
 @Injectable()
 export class TransactionService {
@@ -77,5 +81,25 @@ export class TransactionService {
       `Transfer transaction created: ${savedTransaction.transactionId}`,
     );
     return savedTransaction;
+  }
+
+  async getTransaction(transactionId: string): Promise<Transaction> {
+    const transaction = await this.transactionRepository.findOne({
+      where: { transactionId },
+    });
+
+    if (!transaction) {
+      throw new NotFoundException(
+        `Transaction with ID ${transactionId} not found`,
+      );
+    }
+
+    return transaction;
+  }
+
+  async getAllTransactions(): Promise<Transaction[]> {
+    return this.transactionRepository.find({
+      order: { createdAt: 'DESC' },
+    });
   }
 }
