@@ -133,4 +133,17 @@ export class TransactionService {
       order: { createdAt: 'DESC' },
     });
   }
+
+  async getTransactionsByAccount(accountId: string): Promise<Transaction[]> {
+    return this.transactionRepository
+      .createQueryBuilder('transaction')
+      .where(
+        'transaction.sourceAccountId = :accountId OR transaction.destinationAccountId = :accountId',
+        {
+          accountId,
+        },
+      )
+      .orderBy('transaction.createdAt', 'DESC')
+      .getMany();
+  }
 }
