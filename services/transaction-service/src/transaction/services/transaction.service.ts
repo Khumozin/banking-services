@@ -1,4 +1,48 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { KafkaService } from 'src/kafka/services/kafka.service';
+import { Repository } from 'typeorm';
+import { Transaction } from '../entities/transaction.entity';
+import { DepositDto, TransactionInitiatedEvent } from '../dtos/transaction.dto';
 
 @Injectable()
-export class TransactionService {}
+export class TransactionService {
+  private readonly logger = new Logger(TransactionService.name);
+
+  constructor(
+    @InjectRepository(Transaction)
+    private readonly transactionRepository: Repository<Transaction>,
+    private readonly kafkaService: KafkaService,
+  ) {}
+
+  async createDeposit(depositDto: DepositDto): Promise<Transaction> {
+    this.logger.log(
+      `Creating deposit transaction for account ${depositDto.destinationAccountId}`,
+    );
+
+    // Create transaction record
+    const transaction = this.transactionRepository.create({
+      destinationAccountId: depositDto.destinationAccountId,
+      amount: depositDto.amount,
+      status: 'PENDING',
+      transactionType: 'DEPOSIT',
+    });
+
+    const savedTransaction = await this.transactionRepository.save(transaction);
+
+    // Publish transaction.initiated event
+    const event: TransactionInitiatedEvent = {
+      transactionId: savedTransaction.transactionId,
+      destinationAccountId: savedTransaction.destinationAccountId,
+      amount: savedTransaction.amount,
+      transactionType: savedTransaction.transactionType,
+    };
+
+    await this.kafkaService.publish('transaction.initiated', event);
+
+    this.logger.log(
+      `Deposit transaction created: ${savedTransaction.transactionId}`,
+    );
+    return savedTransaction;
+  }
+}
