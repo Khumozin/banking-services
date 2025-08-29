@@ -1,7 +1,7 @@
 {
   "name": "transaction-service",
-  "version": "0.0.1",
-  "description": "",
+  "version": "1.0.0",
+  "description": "Transaction Service for Banking System",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
