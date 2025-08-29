@@ -102,4 +102,28 @@ export class TransactionService {
       order: { createdAt: 'DESC' },
     });
   }
+
+  async updateTransactionStatus(
+    transactionId: string,
+    status: string,
+    reason?: string,
+  ): Promise<void> {
+    const transaction = await this.transactionRepository.findOne({
+      where: { transactionId },
+    });
+
+    if (!transaction) {
+      this.logger.warn(
+        `Transaction ${transactionId} not found for status update`,
+      );
+      return;
+    }
+
+    transaction.status = status;
+    await this.transactionRepository.save(transaction);
+
+    this.logger.log(
+      `Transaction ${transactionId} status updated to ${status}${reason ? ` (${reason})` : ''}`,
+    );
+  }
 }
