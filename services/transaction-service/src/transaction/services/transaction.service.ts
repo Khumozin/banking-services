@@ -126,4 +126,11 @@ export class TransactionService {
       `Transaction ${transactionId} status updated to ${status}${reason ? ` (${reason})` : ''}`,
     );
   }
+
+  async getTransactionsByStatus(status: string): Promise<Transaction[]> {
+    return this.transactionRepository.find({
+      where: { status },
+      order: { createdAt: 'DESC' },
+    });
+  }
 }
