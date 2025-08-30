@@ -9,8 +9,8 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { Kafka, Producer, Consumer } from 'kafkajs';
 
-import { TransactionResultEvent } from '../../transaction/dtos/transaction.dto';
-import { TransactionService } from '../../transaction/services/transaction.service';
+import { TransactionResultEvent } from 'src/transaction/dtos/transaction.dto';
+import { TransactionService } from 'src/transaction/services/transaction.service';
 
 @Injectable()
 export class KafkaService implements OnModuleInit, OnModuleDestroy {

@@ -1,6 +1,6 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { KafkaService } from 'src/kafka/services/kafka.service';
+import { KafkaService } from '../../kafka/services/kafka.service';
 import { Repository } from 'typeorm';
 import { Transaction } from '../entities/transaction.entity';
 import {
