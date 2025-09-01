@@ -1,0 +1,726 @@
+{
+    "info": {
+        "name": "Banking Transaction System API",
+        "description": "Complete API collection for testing the Banking Transaction System microservices",
+        "version": "1.0.0",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+        {
+            "key": "account_service_url",
+            "value": "http://localhost:5001",
+            "type": "string"
+        },
+        {
+            "key": "transaction_service_url",
+            "value": "http://localhost:3001",
+            "type": "string"
+        },
+        {
+            "key": "sample_account_id_1",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "sample_account_id_2",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "sample_transaction_id",
+            "value": "",
+            "type": "string"
+        }
+    ],
+    "item": [
+        {
+            "name": "Account Service",
+            "item": [
+                {
+                    "name": "Health Check - Account Service",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{account_service_url}}/api/accounts/health",
+                            "host": [
+                                "{{account_service_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "accounts",
+                                "health"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Account - Alice",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 201) {",
+                                    "    const response = pm.response.json();",
+                                    "    pm.collectionVariables.set('sample_account_id_1', response.accountId);",
+                                    "    console.log('Account 1 ID:', response.accountId);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"ownerName\": \"Alice Johnson\",\n    \"initialBalance\": 1000.00\n}"
+                        },
+                        "url": {
+                            "raw": "{{account_service_url}}/api/accounts",
+                            "host": [
+                                "{{account_service_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "accounts"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Account - Bob",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 201) {",
+                                    "    const response = pm.response.json();",
+                                    "    pm.collectionVariables.set('sample_account_id_2', response.accountId);",
+                                    "    console.log('Account 2 ID:', response.accountId);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"ownerName\": \"Bob Smith\",\n    \"initialBalance\": 500.00\n}"
+                        },
+                        "url": {
+                            "raw": "{{account_service_url}}/api/accounts",
+                            "host": [
+                                "{{account_service_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "accounts"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get All Accounts",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{account_service_url}}/api/accounts",
+                            "host": [
+                                "{{account_service_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "accounts"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Account by ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{account_service_url}}/api/accounts/{{sample_account_id_1}}",
+                            "host": [
+                                "{{account_service_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "accounts",
+                                "{{sample_account_id_1}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Account Balance",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{account_service_url}}/api/accounts/{{sample_account_id_1}}/balance",
+                            "host": [
+                                "{{account_service_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "accounts",
+                                "{{sample_account_id_1}}",
+                                "balance"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Transaction Service",
+            "item": [
+                {
+                    "name": "Health Check - Transaction Service",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{transaction_service_url}}/health",
+                            "host": [
+                                "{{transaction_service_url}}"
+                            ],
+                            "path": [
+                                "health"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Deposit",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 201) {",
+                                    "    const response = pm.response.json();",
+                                    "    pm.collectionVariables.set('sample_transaction_id', response.transactionId);",
+                                    "    console.log('Transaction ID:', response.transactionId);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"destinationAccountId\": \"{{sample_account_id_1}}\",\n    \"amount\": 200.50\n}"
+                        },
+                        "url": {
+                            "raw": "{{transaction_service_url}}/api/transactions/deposit",
+                            "host": [
+                                "{{transaction_service_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "transactions",
+                                "deposit"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Transfer",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 201) {",
+                                    "    const response = pm.response.json();",
+                                    "    console.log('Transfer Transaction ID:', response.transactionId);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"sourceAccountId\": \"{{sample_account_id_1}}\",\n    \"destinationAccountId\": \"{{sample_account_id_2}}\",\n    \"amount\": 150.00\n}"
+                        },
+                        "url": {
+                            "raw": "{{transaction_service_url}}/api/transactions/transfer",
+                            "host": [
+                                "{{transaction_service_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "transactions",
+                                "transfer"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get All Transactions",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{transaction_service_url}}/api/transactions",
+                            "host": [
+                                "{{transaction_service_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "transactions"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Transaction by ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{transaction_service_url}}/api/transactions/{{sample_transaction_id}}",
+                            "host": [
+                                "{{transaction_service_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "transactions",
+                                "{{sample_transaction_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Transactions by Account",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{transaction_service_url}}/api/transactions/account/{{sample_account_id_1}}",
+                            "host": [
+                                "{{transaction_service_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "transactions",
+                                "account",
+                                "{{sample_account_id_1}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Transactions by Status",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{transaction_service_url}}/api/transactions?status=COMPLETED",
+                            "host": [
+                                "{{transaction_service_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "transactions"
+                            ],
+                            "query": [
+                                {
+                                    "key": "status",
+                                    "value": "COMPLETED"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Test Scenarios",
+            "item": [
+                {
+                    "name": "Scenario 1 - Successful Deposit",
+                    "item": [
+                        {
+                            "name": "1. Create Account",
+                            "event": [
+                                {
+                                    "listen": "test",
+                                    "script": {
+                                        "exec": [
+                                            "pm.test('Account created successfully', function () {",
+                                            "    pm.response.to.have.status(201);",
+                                            "});",
+                                            "",
+                                            "const response = pm.response.json();",
+                                            "pm.collectionVariables.set('test_account_id', response.accountId);"
+                                        ],
+                                        "type": "text/javascript"
+                                    }
+                                }
+                            ],
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"ownerName\": \"Test User\",\n    \"initialBalance\": 100.00\n}"
+                                },
+                                "url": {
+                                    "raw": "{{account_service_url}}/api/accounts",
+                                    "host": [
+                                        "{{account_service_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "accounts"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "2. Make Deposit",
+                            "event": [
+                                {
+                                    "listen": "test",
+                                    "script": {
+                                        "exec": [
+                                            "pm.test('Deposit transaction created', function () {",
+                                            "    pm.response.to.have.status(201);",
+                                            "});",
+                                            "",
+                                            "const response = pm.response.json();",
+                                            "pm.test('Transaction has correct type', function () {",
+                                            "    pm.expect(response.transactionType).to.eql('DEPOSIT');",
+                                            "});",
+                                            "",
+                                            "pm.test('Transaction amount is correct', function () {",
+                                            "    pm.expect(response.amount).to.eql(50);",
+                                            "});"
+                                        ],
+                                        "type": "text/javascript"
+                                    }
+                                }
+                            ],
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"destinationAccountId\": \"{{test_account_id}}\",\n    \"amount\": 50.00\n}"
+                                },
+                                "url": {
+                                    "raw": "{{transaction_service_url}}/api/transactions/deposit",
+                                    "host": [
+                                        "{{transaction_service_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "transactions",
+                                        "deposit"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "3. Wait for Processing",
+                            "event": [
+                                {
+                                    "listen": "prerequest",
+                                    "script": {
+                                        "exec": [
+                                            "// Wait 3 seconds for transaction processing",
+                                            "setTimeout(function(){}, 3000);"
+                                        ],
+                                        "type": "text/javascript"
+                                    }
+                                }
+                            ],
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{account_service_url}}/api/accounts/health",
+                                    "host": [
+                                        "{{account_service_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "accounts",
+                                        "health"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "4. Verify Balance Updated",
+                            "event": [
+                                {
+                                    "listen": "test",
+                                    "script": {
+                                        "exec": [
+                                            "pm.test('Account balance updated', function () {",
+                                            "    const response = pm.response.json();",
+                                            "    pm.expect(response.balance).to.eql(150);",
+                                            "});"
+                                        ],
+                                        "type": "text/javascript"
+                                    }
+                                }
+                            ],
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{account_service_url}}/api/accounts/{{test_account_id}}",
+                                    "host": [
+                                        "{{account_service_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "accounts",
+                                        "{{test_account_id}}"
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Scenario 2 - Failed Transfer (Insufficient Funds)",
+                    "item": [
+                        {
+                            "name": "1. Create Source Account",
+                            "event": [
+                                {
+                                    "listen": "test",
+                                    "script": {
+                                        "exec": [
+                                            "const response = pm.response.json();",
+                                            "pm.collectionVariables.set('source_account_id', response.accountId);"
+                                        ],
+                                        "type": "text/javascript"
+                                    }
+                                }
+                            ],
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"ownerName\": \"Low Balance User\",\n    \"initialBalance\": 10.00\n}"
+                                },
+                                "url": {
+                                    "raw": "{{account_service_url}}/api/accounts",
+                                    "host": [
+                                        "{{account_service_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "accounts"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "2. Create Destination Account",
+                            "event": [
+                                {
+                                    "listen": "test",
+                                    "script": {
+                                        "exec": [
+                                            "const response = pm.response.json();",
+                                            "pm.collectionVariables.set('dest_account_id', response.accountId);"
+                                        ],
+                                        "type": "text/javascript"
+                                    }
+                                }
+                            ],
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"ownerName\": \"Destination User\",\n    \"initialBalance\": 100.00\n}"
+                                },
+                                "url": {
+                                    "raw": "{{account_service_url}}/api/accounts",
+                                    "host": [
+                                        "{{account_service_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "accounts"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "3. Attempt Large Transfer",
+                            "event": [
+                                {
+                                    "listen": "test",
+                                    "script": {
+                                        "exec": [
+                                            "pm.test('Transfer transaction created', function () {",
+                                            "    pm.response.to.have.status(201);",
+                                            "});",
+                                            "",
+                                            "const response = pm.response.json();",
+                                            "pm.collectionVariables.set('failed_transaction_id', response.transactionId);"
+                                        ],
+                                        "type": "text/javascript"
+                                    }
+                                }
+                            ],
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"sourceAccountId\": \"{{source_account_id}}\",\n    \"destinationAccountId\": \"{{dest_account_id}}\",\n    \"amount\": 100.00\n}"
+                                },
+                                "url": {
+                                    "raw": "{{transaction_service_url}}/api/transactions/transfer",
+                                    "host": [
+                                        "{{transaction_service_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "transactions",
+                                        "transfer"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "4. Wait for Processing",
+                            "event": [
+                                {
+                                    "listen": "prerequest",
+                                    "script": {
+                                        "exec": [
+                                            "// Wait 3 seconds for transaction processing",
+                                            "setTimeout(function(){}, 3000);"
+                                        ],
+                                        "type": "text/javascript"
+                                    }
+                                }
+                            ],
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{account_service_url}}/api/accounts/health",
+                                    "host": [
+                                        "{{account_service_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "accounts",
+                                        "health"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "5. Verify Transaction Failed",
+                            "event": [
+                                {
+                                    "listen": "test",
+                                    "script": {
+                                        "exec": [
+                                            "pm.test('Transaction status is FAILED', function () {",
+                                            "    const response = pm.response.json();",
+                                            "    pm.expect(response.status).to.eql('FAILED');",
+                                            "});"
+                                        ],
+                                        "type": "text/javascript"
+                                    }
+                                }
+                            ],
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{transaction_service_url}}/api/transactions/{{failed_transaction_id}}",
+                                    "host": [
+                                        "{{transaction_service_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "transactions",
+                                        "{{failed_transaction_id}}"
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
