@@ -36,16 +36,6 @@ Microservices-based distributed system with event-driven architecture using .NET
 * **Health check endpoints** for all services
 * **Error handling** with proper HTTP status codes
 
-## 📋 Deliverables Provided
-✅ **Docker Compose file** with all services and infrastructure<br>
-✅ **Account Service** (.NET Core) with full CRUD and event processing<br>
-✅ **Transaction Service** (NestJS) with deposit/transfer APIs<br>
-✅ **Notification Service** (NestJS) with console-based notifications<br>
-✅ **PostgreSQL schema** with proper tables and relationships<br>
-✅ **Redis balance caching** implementation<br>
-✅ **Kafka event system** with proper topics and consumers<br>
-✅ **Postman collection** with test scenarios and automation
-
 ## 🚀 Getting Started
 1. **Create the directory structure** as shown in the setup instructions
 2. **Copy all the provided files** to their respective locations
